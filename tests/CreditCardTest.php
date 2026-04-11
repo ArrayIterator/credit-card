@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use function array_keys;
 use function count;
+use function sprintf;
 
 class CreditCardTest extends TestCase
 {
@@ -30,6 +31,16 @@ class CreditCardTest extends TestCase
         $this->assertTrue($this->creditCardDefault->has('VISA'));
         $this->assertTrue($this->creditCardDefault->has('mastercard'));
         $this->assertTrue($this->creditCardDefault->has('amex'));
+        /**
+         * @var CreditCardBrandInterface $brandClass
+         */
+        foreach (CreditCard::FACTORY_CARDS as $id => $brandClass) {
+            $this->assertInstanceOf(
+                $brandClass,
+                $this->creditCardDefault->get($id),
+                sprintf('Id %s should instanceof: %s', $id, $brandClass)
+            );
+        }
     }
 
     #[test]
